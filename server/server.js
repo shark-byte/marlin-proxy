@@ -7,15 +7,14 @@ const bundleRouter = require('./routes/bundleRouter.js');
 const app = express();
 
 app.use(morgan('dev'));
-app.use(express.static(path.join(__dirname, './../public')));
+app.get('/', (req, res) => {
+  res.redirect('/restaurants/ChIJUcXYWWGAhYARmjMY2bJAG2s/');
+})
 
-app.get('/restaurants/:id', (req, res) => {
-  res.sendFile(path.join(__dirname, './../public/index.html'));
-});
-app.get('/restaurants/:widget/bundle.js', bundleRouter);
-app.get('/:widget/bundle.js', bundleRouter);
-app.get('/api/restaurants/:id/overview', restaurantsInfoRouter);
+app.use('/restaurants/:id', express.static('public'));
+app.get('/restaurants/:id/:widget/bundle.js', bundleRouter);
 
+app.get('/api/restaurants/:id/:widget', restaurantsInfoRouter);
 
 app.listen(4001, () => {
   console.log('Proxy listening on port 4001');
