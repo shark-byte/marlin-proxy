@@ -8,8 +8,8 @@ const bundleRoutes = {
 };
 
 const bundleRouter = (req, res) => {
-  if (bundleRoutes[req.params.widget]) {
-    bundleRoutes[req.params.widget](req, res)
+  if (bundleRoutes[req.params.service]) {
+    bundleRoutes[req.params.service](req, res)
   } else {
     res.sendStatus(404);
   }

@@ -7,9 +7,9 @@ const routes = {
   recommendations: (req, res) => res.redirect(`http://52.89.102.101/api/restaurants/${req.params.id}/recommendations`),
 }
 
-router.get('/api/restaurants/:id/:widget', (req, res) => {
-  if (routes[req.params.widget]) {
-    routes[req.params.widget](req, res)
+router.get('/api/restaurants/:id/:service', (req, res) => {
+  if (routes[req.params.service]) {
+    routes[req.params.service](req, res)
   } else {
     res.sendStatus(404);
   }
