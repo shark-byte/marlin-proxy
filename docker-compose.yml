@@ -1,0 +1,70 @@
+version: '3'
+
+services:
+# ======== DATABASES ========
+  database:
+    image: mongo:3.6.2
+    networks:
+      - sharkbyte-network
+
+  mongo:
+    image: mongo:3.6.2
+    networks:
+      - sharkbyte-network
+
+  # pg:
+  #   image: enabqz/postgis
+  #   networks:
+  #     - sharkbyte-network
+
+# ======== SERVICES ========
+  # nearby:
+  #   image: enaqbz/nearby
+  #   depends_on:
+  #     - 'pg'
+  #   networks:
+  #     - sharkbyte-network
+  #   environment:
+  #     PG_HOST: 'pg'
+  #     PG_USER: 'postgres'
+
+  gallery:
+    image: mermanly/gallery
+    depends_on: 
+      - 'mongo'
+    networks:
+      - sharkbyte-network
+    environment:
+      DATABASE_HOST: 'mongo'
+
+  sidebar:
+    image: james9446/sidebar:side_bar
+    depends_on:
+      - 'database'
+    networks:
+      - sharkbyte-network
+    environment:
+      DATABASE_HOST: 'database'
+
+# ======== SERVERS ========
+  nginx:
+    image: js-nginx
+    ports:
+      - "80:8888"
+    depends_on:
+      # - 'nearby'
+      # - 'pg'
+      - 'node-proxy'
+      - 'gallery'
+      - 'sidebar'
+    networks:
+      - sharkbyte-network
+
+  node-proxy:
+    image: node-proxy
+    networks:
+      - sharkbyte-network
+
+networks:
+  sharkbyte-network:
+    driver: bridge
