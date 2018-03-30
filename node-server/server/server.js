@@ -59,7 +59,7 @@ app.get('/restaurants/:id', async (req, res) => {
       <head>
         <meta charset="utf-8">
         <link rel="stylesheet" type="text/css" href="/gallery/styles.css">
-        <!-- <link rel="stylesheet" type="text/css" href="/nearby/styles.css"> -->
+        <link rel="stylesheet" type="text/css" href="/nearby/styles.css">
         <link rel="stylesheet" type="text/css" href="/sidebar/styles.css">
         <!-- <link rel="stylesheet" type="text/css" href="/overview/styles.css"> -->
         <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
@@ -67,7 +67,7 @@ app.get('/restaurants/:id', async (req, res) => {
         <title>SharkByte</title>
       </head>
       <body>
-        <div id="gallery-app">${galleryHtml}</div>
+        <div id="gallery">${galleryHtml}</div>
         <div id="midsection">
           <div id="overview-app"></div>
           <div id="sidebar-app">${sidebarHtml}</div>
