@@ -1,4 +1,4 @@
 #!/bin/bash
-sleep 10s
+sleep 5s
 echo "Starting nginx..."
 nginx -g "daemon off;"

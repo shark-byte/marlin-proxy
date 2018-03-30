@@ -10,14 +10,16 @@ app.get('/', (req, res) => {
 
 // app.use('/', express.static('public'));
 
+const hostname = 'proxy';
+
 app.get('/restaurants/:id', async (req, res) => {
   let galleryHtml, nearbyHtml, sidebarHtml, overviewHtml;
   const { id } = req.params;
   const services = {
-    'gallery': `http://localhost:3001/gallery/restaurant/${id}`,
-    'nearby': `http://localhost:8000/nearby/restaurant/${id}`,
-    'sidebar': `http://localhost:3003/sidebar/restaurant/${id}`,
-    'overview': `http://localhost:8000/overview/restaurant/${id}`,
+    'gallery': `http://${hostname}:8888/gallery/restaurants/${id}`,
+    'nearby': `http://${hostname}:8888/nearby/restaurants/${id}`,
+    'sidebar': `http://${hostname}:8888/sidebar/restaurants/${id}`,
+    'overview': `http://${hostname}:8888/overview/restaurants/${id}`,
   }
 
   await request(services['gallery'], (error, response, body) => {
@@ -28,19 +30,19 @@ app.get('/restaurants/:id', async (req, res) => {
     }
   });
 
-  // await request(services['nearby'], (error, response, body) => {
-  //   if (error) {
-  //     throw error;
-  //   } else {
-  //     galleryHtml = body;
-  //   }
-  // });
+  await request(services['nearby'], (error, response, body) => {
+    if (error) {
+      throw error;
+    } else {
+      nearbyHtml = body;
+    }
+  });
 
   await request(services['sidebar'], (error, response, body) => {
     if (error) {
       throw error;
     } else {
-      galleryHtml = body;
+      sidebarHtml = body;
     }
   });
 
@@ -48,7 +50,7 @@ app.get('/restaurants/:id', async (req, res) => {
   //   if (error) {
   //     throw error;
   //   } else {
-  //     galleryHtml = body;
+  //     overviewHtml = body;
   //   }
   // });
 
@@ -65,10 +67,12 @@ app.get('/restaurants/:id', async (req, res) => {
         <title>SharkByte</title>
       </head>
       <body>
-        ${galleryHtml}
-
-        ${sidebarHtml}
-
+        <div id="gallery-app">${galleryHtml}</div>
+        <div id="midsection">
+          <div id="overview-app"></div>
+          <div id="sidebar-app">${sidebarHtml}</div>
+        </div>
+        <div id="nearby-app">${nearbyHtml}</div>
         <script src="/nearby/bundle.js"></script>
         <script src="/gallery/bundle.js"></script>
         <script src="/sidebar/bundle.js"></script>

@@ -12,25 +12,25 @@ services:
     networks:
       - sharkbyte-network
 
-  # pg:
-  #   image: enabqz/postgis
-  #   networks:
-  #     - sharkbyte-network
+  pg:
+    image: enaqbz/postgis
+    networks:
+      - sharkbyte-network
 
 # ======== SERVICES ========
-  # nearby:
-  #   image: enaqbz/nearby
-  #   depends_on:
-  #     - 'pg'
-  #   networks:
-  #     - sharkbyte-network
-  #   environment:
-  #     PG_HOST: 'pg'
-  #     PG_USER: 'postgres'
+  nearby:
+    image: enaqbz/nearby
+    depends_on:
+      - pg
+    networks:
+      - sharkbyte-network
+    environment:
+      PG_HOST: 'pg'
+      PG_USER: 'postgres'
 
   gallery:
     image: mermanly/gallery
-    depends_on: 
+    depends_on:
       - 'mongo'
     networks:
       - sharkbyte-network
@@ -48,12 +48,13 @@ services:
 
 # ======== SERVERS ========
   nginx:
-    image: js-nginx
+    image: mermanly/js-nginx
+    container_name: 'proxy'
     ports:
       - "80:8888"
     depends_on:
-      # - 'nearby'
-      # - 'pg'
+      - 'nearby'
+      - 'pg'
       - 'node-proxy'
       - 'gallery'
       - 'sidebar'
@@ -61,7 +62,7 @@ services:
       - sharkbyte-network
 
   node-proxy:
-    image: node-proxy
+    image: mermanly/node-proxy
     networks:
       - sharkbyte-network
 
